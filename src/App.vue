@@ -13,7 +13,7 @@
             <router-link to="/list"  >我的音乐</router-link>
           </li>
           <li>
-            <router-link to="/list"  >朋友</router-link>
+            <router-link to="/about"  >朋友</router-link>
           </li>
           <li>
             <router-link to="/list"  >商城</router-link>

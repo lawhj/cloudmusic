@@ -1,28 +1,37 @@
 <template>
   <div class="home">
-    <div class="recommendlist w clearfix">
-      <ul>
-        <li>
-          <a href="#">推荐</a>
-        </li>
-        <li>
-          <a href="#">排行榜</a>
-        </li>
-        <li>
-          <a href="#">歌单</a>
-        </li>
-        <li>
-          <a href="#">主播电台</a>
-        </li>
-        <li>
-          <a href="#">歌手</a>
-        </li>
-        <li>
-          <a href="#">新碟上架</a>
-        </li>
-      </ul>
+    <div class="recommendContainer">
+      <div class="recommendlist w clearfix">
+        <ul>
+          <li>
+            <router-link to='/'>推荐</router-link>
+          </li>
+          <li>
+            <router-link to='/toplist'>排行榜</router-link>
+          </li>
+          <li>
+            <a href="#">歌单</a>
+          </li>
+          <li>
+            <a href="#">主播电台</a>
+          </li>
+          <li>
+            <a href="#">歌手</a>
+          </li>
+          <li>
+            <a href="#">新碟上架</a>
+          </li>
+        </ul>
+      </div>
     </div>
-    <div class="banner">
+
+    <router-view v-slot="{ Component }">
+      <keep-alive>
+        <component class="view" :is="Component" />
+      </keep-alive>
+    </router-view>
+
+    <!-- <div class="banner">
       <div class="block">
   <el-carousel trigger="click" height="300px">
     <el-carousel-item v-for="item in bannerList" :key="item">
@@ -33,8 +42,8 @@
      <div class="downloadApp">
        <img src="~@/assets/images/download.png" class="down">
      </div>
-    </div>
-    <div class="mainbody">
+    </div> -->
+    <!-- <div class="mainbody">
       <div class="hotListRecommend">
         <div class="hotlists">
           <div class="headers">
@@ -136,7 +145,7 @@
       </div>
 
 
-    </div>
+    </div> -->
 
 
   </div>
@@ -155,53 +164,58 @@ export default {
   name: 'Home',
   setup(){
 
-    let banners=ref([])
-    let hotListsArray=ref([])
-    let newListsArray=ref([])
-    let RankListsArray=ref([])
-
-     onMounted(()=>{
-         getBannerList().then(res=>{banners.value=res.data.banners})
-         getSongPlayList('hot',8).then(res=>{hotListsArray.value=res.data.playlists;})
-         getNewAlbum().then(res=>{
-           newListsArray.value=res.data.albums
-         })
-         getList(19723756).then(res=>{RankListsArray.value[0]=res.data.playlist})
-         getList(3779629).then(res=>{RankListsArray.value[1]=res.data.playlist})
-         getList(2884035).then(res=>{RankListsArray.value[2]=res.data.playlist})
-         getSingerDesc(6452).then(res=>{console.log(res);})
-     })
-
-    let bannerList=computed(()=>{
-      return banners.value;
-    })
-
-    let getHotLists=computed(()=>{
-      return hotListsArray.value
-    })
-    let getNewLists=computed(()=>{
-      return newListsArray.value
-    })
-    let getRankLists=computed(()=>{
-      return RankListsArray.value
-    })
-
-
-   return {
-     bannerList,
-     getHotLists,
-     getNewLists,
-     getRankLists
-   }
+   //  let banners=ref([])
+   //  let hotListsArray=ref([])
+   //  let newListsArray=ref([])
+   //  let RankListsArray=ref([])
+   //
+   //   onMounted(()=>{
+   //       getBannerList().then(res=>{banners.value=res.data.banners})
+   //       getSongPlayList('hot',8).then(res=>{hotListsArray.value=res.data.playlists;})
+   //       getNewAlbum().then(res=>{
+   //         newListsArray.value=res.data.albums
+   //       })
+   //       getList(19723756).then(res=>{RankListsArray.value[0]=res.data.playlist})
+   //       getList(3779629).then(res=>{RankListsArray.value[1]=res.data.playlist})
+   //       getList(2884035).then(res=>{RankListsArray.value[2]=res.data.playlist})
+   //       getSingerDesc(6452).then(res=>{console.log(res);})
+   //   })
+   //
+   //  let bannerList=computed(()=>{
+   //    return banners.value;
+   //  })
+   //
+   //  let getHotLists=computed(()=>{
+   //    return hotListsArray.value
+   //  })
+   //  let getNewLists=computed(()=>{
+   //    return newListsArray.value
+   //  })
+   //  let getRankLists=computed(()=>{
+   //    return RankListsArray.value
+   //  })
+   //
+   //
+   // return {
+   //   bannerList,
+   //   getHotLists,
+   //   getNewLists,
+   //   getRankLists
+   // }
 
   }
 }
 </script>
 <style scoped>
-.home{
-  background-color: rgba(194, 12, 12);
+/* .home{
+  /* background-color: rgba(194, 12, 12); */
+  /* height: 35px;
+  line-height: 35px; */
+
+.home .recommendContainer{
   height: 35px;
   line-height: 35px;
+  background-color: rgba(194, 12, 12);
 }
 .home .recommendlist ul{
   margin-left: 200px;
@@ -221,197 +235,5 @@ export default {
 .home .recommendlist{
   margin: 0 auto;
 }
-.banner{
-  width: 1000px;
-  margin: 0 auto;
-  display: flex;
-  height: 300px;
-}
-.block{
-  width:700px;
-  height:100%;
-}
-.block img{
-  width:700px;
-  height:300px;
-}
-.downloadApp img{
-  height:300px;
-  width:250px;
-}
-.mainbody{
-  display: flex;
-  width: 1000px;
-  margin: 10px auto;
-}
-.mainbody .hotListRecommend{
-  width:700px;
-  padding: 0 15px;
-}
-.mainbody .musicianAndKol{
-  width:250px;
 
-}
-.mainbody .musicianAndKol .userlogin{
-  height: 120px;
-  background-color: rgba(237, 237, 237);
-  text-align: center;
-  font-size: 10px;
-  padding-top: 10px;
-}
-
-.mainbody .musicianAndKol button{
-  width: 100px;
-  height: 30px;
-  border-radius: 5px;
-  color: white;
-  outline: none;
-  background-color: rgba(211, 17, 23);
-}
-.mainbody .musicianAndKol .singers{
-  height:20px;
-  line-height: 20px;
-  font-size: 12px;
-}
-.mainbody .musicianAndKol .singerHeader h4{
-  float: left;
-
-}
-.mainbody .musicianAndKol .singerHeader a{
-  float: right;
-}
-
-.headers
-{ width: 100%;
-  height: 30px;
-  line-height: 30px;
-  border-bottom: 2px solid rgba(193, 13, 12);
-}
-.headers .title{
-  position: relative;
-  padding-left:30px;
-}
-.headers .title:before
-{
-  position: absolute;
-  top:6px;
-  left:5px;
-  content: '';
-  width:20px;
-  height: 20px;
-  background: url('~@/assets/images/round.png') no-repeat;
-  background-size: 20px 20px;
-}
-.headers h3{
-  float: left;
-}
-.headers ul{
-  float: left;
-  margin-left: 30px;
-}
-.headers ul li{
-  float: left;
-}
-.headers ul li a{
-  padding: 0 15px;
-  font-size: 10px;
-  color: rgba(206, 153, 102);
-}
-.headers .right{
-  float:right;
-  font-size: 10px;
-  color: rgba(206, 153, 102);
-}
-.listDetail{
-  width:100%;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-around;
-}
-.listDetail .listItem{
-  width:22%;
-}
-.listDetail .listItem img{
-  width:100%;
-  height:auto;
-}
-.listDetail .listItem a{
-  color: rgba(82, 0, 82);
-}
-
-.headers{
-  margin: 10px 0;
-}
-.listDetail .block{
-  width:700px;
-  /* display: flex; */
-}
-.listDetail img{
-  width:100%;
-  height:auto;
-}
-.listDetail .block a{
-  display: block;
-}
-.listDetail .block .newsong{
-  width:80px;
-  text-align: center;
-}
-.listDetail .block .newsong a:nth-of-type(1){
-  color: black;
-  font-size:10px;
-}
-.listDetail .block .newsong a:nth-of-type(2){
-  color: rgba(102, 102, 102);
-  font-size:10px;
-}
-.el-carousel__item.is-animating {
-    display: flex;
-    justify-content: space-between;
-}
-
-.rankBody .rankItem .rankHeader img{
-  width:80px;
-  height:auto;
-}
-.rankBody{
-  display: flex;
-  justify-content: space-between;
-  text-align:center;
-  background-color: rgba(244, 244, 244);
-}
-
-.rankBody .rankItem{
-  padding: 0 15px;
-  width:230px;
-}
-.rankBody .rankHeader img{
-  vertical-align: middle;
-}
-.rankBody .rankItem li
-{
-   width:100%;
-}
-.rankBody .rankItem a{
-  font-size: 10px;
-  padding-right: 30px;
-}
-.rankBody .rankHeader a{
-  font-size: 18px;
-  margin-left:10px;
-
-}
-.rankBody .rankItem li:nth-child(2n-1){
-  background-color: rgba(232, 232, 232);
-}
-.rankBody .rankItem a:hover{
-  text-decoration: underline;
-}
-
-.rankBody .checkall{
-  list-style: none;
-}
-.rankBody .checkall a{
-  float:right;
-}
 </style>
