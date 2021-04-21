@@ -62,7 +62,7 @@
               <td>
                 <img :src="item.al.picUrl" v-if="index<3" class="songCover">
                 <div class="playsong">
-                  <img src="~@/assets/images/play.png" >
+                  <img src="~@/assets/images/play.png" @click.prevent="toplaysong(item)" >
                   <a href="#">{{item.al.name}}</a>
                 </div>
               </td>
@@ -76,21 +76,36 @@
     </div>
 
 
+<Songplay :songid="playsongID"  v-show="isPlaySong" :songcover="playsongCover" :singer="playsongSinger" :songname="playsongName" @closeplayer="closeMusicPlayer" ></Songplay>
+
   </div>
+
+
 </template>
 
 <script>
-import {onMounted,ref,computed,reactive,toRefs} from 'vue'
-import {getList} from '@/network/list.js'
+import {onMounted,ref,computed,reactive,toRefs} from 'vue';
+import {getList} from '@/network/list.js';
+import Songplay from '@/views/Songplay.vue';
 
 export default {
   name:'Songlist',
+  components:{
+    Songplay
+  },
   setup(){
    let RankListsArray=ref([])
    let choice=ref(0)
    let obj=reactive({
      objlist:{}
    })
+
+   let isPlaySong=ref(false)
+   let playsongID=ref(0)
+
+   let playsongCover=ref('')
+   let playsongSinger=ref('')
+   let playsongName=ref('')
 
    onMounted(()=>{
 
@@ -115,13 +130,31 @@ export default {
      console.log(time);
    }
 
+   let toplaysong=(item)=>{
+     isPlaySong.value=true
+     playsongID.value=item.id
+     playsongCover.value=item.al.picUrl
+     playsongSinger.value=item.ar[0].name
+     playsongName.value=item.al.name
+   }
+
+   let closeMusicPlayer=()=>{
+     isPlaySong.value=false
+   }
 
 
    return{
      getRankLists,
      itemClick,
      ...toRefs(obj),
-     getTime
+     getTime,
+     isPlaySong,
+     toplaysong,
+     playsongID,
+     playsongCover,
+     playsongSinger,
+     playsongName,
+     closeMusicPlayer
    }
 
 
@@ -135,7 +168,7 @@ export default {
   width:1000px;
   margin: 0 auto;
   display: flex;
-  padding-top: 20px;
+  padding: 20px 0 80px 0;
 }
 .song .sidebar{
   width: 240px;
