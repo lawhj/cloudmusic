@@ -29,7 +29,7 @@
 
 <script>
 import {ref,onMounted,computed,watch} from 'vue'
-import {getSongDetail} from '@/network/songdetail.js'
+import {getSongURl} from '@/network/songdetail.js'
 
 
 export default {
@@ -56,10 +56,9 @@ export default {
          let songSinger=ref('')
 
          watch(()=>{
-             getSongDetail(props.songid).then(res=>{
+             getSongURl(props.songid).then(res=>{
                songURL.value=res.data.data[0].url
-               console.log('传过来的封面',props.songcover);
-               console.log('传过来的歌手',props.singer);
+               console.log(res);
              })
 
          })

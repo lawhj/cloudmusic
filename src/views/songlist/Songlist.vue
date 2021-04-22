@@ -63,7 +63,7 @@
                 <img :src="item.al.picUrl" v-if="index<3" class="songCover">
                 <div class="playsong">
                   <img src="~@/assets/images/play.png" @click.prevent="toplaysong(item)" >
-                  <a href="#">{{item.al.name}}</a>
+                  <a href="#" @click.prevent="goToSongDetail(item)" >{{item.al.name}}</a>
                 </div>
               </td>
               <td>{{parseInt(item.dt/1000/60).toString().padStart(2,'0')}}:{{parseInt(item.dt/1000%60).toString().padStart(2,'0')}}</td>
@@ -88,6 +88,8 @@ import {onMounted,ref,computed,reactive,toRefs} from 'vue';
 import {getList} from '@/network/list.js';
 import Songplay from '@/views/Songplay.vue';
 
+import {useRouter} from 'vue-router'
+
 export default {
   name:'Songlist',
   components:{
@@ -106,6 +108,8 @@ export default {
    let playsongCover=ref('')
    let playsongSinger=ref('')
    let playsongName=ref('')
+
+   const router=useRouter()
 
    onMounted(()=>{
 
@@ -142,6 +146,10 @@ export default {
      isPlaySong.value=false
    }
 
+   let goToSongDetail=(item)=>{
+       router.push({path:'/song',query:{songid:item.id}})
+   }
+
 
    return{
      getRankLists,
@@ -154,7 +162,8 @@ export default {
      playsongCover,
      playsongSinger,
      playsongName,
-     closeMusicPlayer
+     closeMusicPlayer,
+     goToSongDetail
    }
 
 
