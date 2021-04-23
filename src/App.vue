@@ -19,7 +19,7 @@
             <router-link to="/song"  >商城</router-link>
           </li>
           <li>
-            <router-link to="/play"  >音乐人</router-link>
+            <router-link to="/list"  >音乐人</router-link>
           </li>
           <li>
             <router-link to="/list"  >下载客户端</router-link>

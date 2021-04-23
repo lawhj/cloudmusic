@@ -110,7 +110,11 @@ export default {
         }
 
         let toClosePlayer=()=>{
+
+             isPlaying.value=false
+             player.value.pause()
           emit('closeplayer')
+
         }
 
         return {

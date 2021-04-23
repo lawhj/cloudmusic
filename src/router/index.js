@@ -13,6 +13,11 @@ const routes = [
       },
       { path: 'toplist',
       component: () => import(/* webpackChunkName: "about" */ '../views/songlist/Songlist.vue')
+      },
+      {
+        path: '/playlist',
+        name: 'Playlist',
+        component: () => import(/* webpackChunkName: "about" */ '../views/songlist/Playlist.vue')
       }
     ]
   },
@@ -39,6 +44,12 @@ const routes = [
     name: 'Song',
     component: () => import(/* webpackChunkName: "about" */ '../views/song/Song.vue')
   }
+  // ,
+  // {
+  //   path: '/playlist',
+  //   name: 'Playlist',
+  //   component: () => import(/* webpackChunkName: "about" */ '../views/songlist/Playlist.vue')
+  // }
 ]
 
 const router = createRouter({

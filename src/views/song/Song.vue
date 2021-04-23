@@ -14,7 +14,7 @@
           <h5 v-show="alia" class="songAlia">{{alia}}</h5>
           <h5>歌手: <a href="#">{{singer}}</a> </h5>
           <div class="fn">
-            <button>播放</button>
+            <button @click.prevent="toplaysong(-1)">播放</button>
             <button>下载</button>
             <button>收藏</button>
             <button>评论</button>
@@ -66,7 +66,7 @@
               <a href="#">{{item.name}}</a>
               <a href="#">{{item.artists[0].name}}</a>
             </div>
-            <i></i>
+            <i @click.prevent="toplaysong(0,item)" ></i>
           </li>
         </ul>
       </div>
@@ -90,7 +90,8 @@ import Songplay from '@/views/Songplay.vue'
 export default {
   name:'Song',
   components:{
-    Topheader
+    Topheader,
+    Songplay
   },
   setup(){
 
@@ -113,6 +114,36 @@ export default {
     let sid=ref(0)
 
     let similars=ref([])
+
+    let isPlaySong=ref(false)
+    let playsongID=ref(0)
+    let playsongCover=ref('')
+    let playsongSinger=ref('')
+    let playsongName=ref('')
+
+    let closeMusicPlayer=()=>{
+      isPlaySong.value=false
+    }
+
+    let toplaysong=(id,item)=>{
+
+        if(id==-1) {
+           playsongID.value=sid.value
+           playsongCover.value=coverUrl.value
+           playsongSinger.value=singer.value
+           playsongName.value=songname.value
+           isPlaySong.value=true
+        }
+        else{
+          playsongID.value=item.privilege.id
+          playsongCover.value=item.album.picUrl
+          playsongSinger.value=item.artists[0].name
+          playsongName.value=item.name
+          isPlaySong.value=true
+
+        }
+
+    }
 
 
     let init=(id)=>{
@@ -222,7 +253,14 @@ export default {
     comments,
     pageFirst,
     pageChange,
-    similars
+    similars,
+    playsongID,
+    playsongCover,
+    playsongSinger,
+    playsongName,
+    closeMusicPlayer,
+    isPlaySong,
+    toplaysong
   }
 
   }

@@ -10,7 +10,7 @@
             <router-link to='/toplist'>排行榜</router-link>
           </li>
           <li>
-            <a href="#">歌单</a>
+            <router-link to='/playlist'>歌单</router-link>
           </li>
           <li>
             <a href="#">主播电台</a>
