@@ -59,6 +59,8 @@ export default {
              getSongURl(props.songid).then(res=>{
                songURL.value=res.data.data[0].url
                console.log(res);
+
+               isPlaying.value=false
              })
 
          })

@@ -2,18 +2,19 @@
   <div class="songplaylist">
     <div class="header">
       <div class="choice">
-        <h2>全部</h2>
+        <h2>{{curCat}}</h2>
         <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal" @select="handleSelect">
   <el-submenu index="1">
     <template #title>选择分类</template>
-    <el-menu-item index="1-1">华语</el-menu-item>
-    <el-menu-item index="1-2">欧美</el-menu-item>
-    <el-menu-item index="1-2">粤语</el-menu-item>
+    <el-menu-item index="0" @click="menuClick(0)" >全部</el-menu-item>
+    <el-menu-item index="1" @click="menuClick(1)" >华语</el-menu-item>
+    <el-menu-item index="2" @click="menuClick(2)">欧美</el-menu-item>
+    <el-menu-item index="3" @click="menuClick(3)">粤语</el-menu-item>
   </el-submenu>
 </el-menu>
       </div>
       <div class="toChange">
-        <button>热门</button>
+        <button @click.prevent="changeOrder">{{order}}</button>
       </div>
 
     </div>
@@ -22,7 +23,7 @@
       <div class="songlists" v-show="listShow">
         <div class="listItem" v-for="item in getList">
           <img :src="item.coverImgUrl" @click.prevent="goToListDetail(item.id)"   />
-          <a href="#">{{item.name}}</a>
+          <a href="#" @click.prevent="goToListDetail(item.id)" >{{item.name}}</a>
         </div>
       </div>
 
@@ -32,8 +33,12 @@
     layout="prev, pager, next"
     page-size="35"
     @current-change="pageChange"
+    :current-page="curPage"
     :total="350">
   </el-pagination>
+
+
+
       </div>
     </div>
 
@@ -43,6 +48,8 @@
 <script>
 import {ref,onMounted,computed} from 'vue'
 import {getSongPlayList} from '@/network/songlist/songlists.js'
+import {useRouter} from 'vue-router'
+
 
 export default {
   name:'Playlist',
@@ -50,6 +57,15 @@ export default {
 
         let listArray=ref([])
         let listShow=ref(true)
+        let order=ref('最新')
+        let useForOrder=ref('hot')
+
+        let curCat=ref('全部')
+
+        let curPage=ref('1')
+
+        const router=useRouter()
+
 
        onMounted(()=>{
           getSongPlayList('hot',35).then(res=>{
@@ -65,25 +81,62 @@ export default {
 
        let goToListDetail=(id)=>
        {
-         console.log(id);
+         router.push({path:'/songlistdetail',query:{listid:id}})
        }
 
        let pageChange=(index)=>{
-         if(index==1) return
          listShow.value=false
-         getSongPlayList('hot',35,index-1).then(res=>{
+         getSongPlayList(useForOrder.value,35,index-1,curCat.value).then(res=>{
 
            listArray.value=res.data.playlists;
            listShow.value=true
+           curPage.value=index
          })
        }
+
+       let changeOrder=()=>{
+         if(order.value=='最新') {
+             listShow.value=false
+             useForOrder.value='new'
+             pageChange(1)
+             order.value='最热'
+         }
+         else{
+           listShow.value=false
+           useForOrder.value='hot'
+           // getSongPlayList(useForOrder.value,35).then(res=>{
+           //
+           //   listArray.value=res.data.playlists;
+           //   console.log(res.data.playlists);
+           //   listShow.value=true
+           //   order.value='最新'
+           // })
+           pageChange(1)
+           order.value='最新'
+         }
+
+       }
+
+       let menuClick=(index)=>{
+         let arr=['全部','华语','欧美','粤语']
+         listShow.value=false
+         curCat.value=arr[index]
+         pageChange(1)
+
+       }
+
 
        return {
          listArray,
          getList,
          goToListDetail,
          pageChange,
-         listShow
+         listShow,
+         order,
+         changeOrder,
+         menuClick,
+         curCat,
+         curPage
        }
   }
 }

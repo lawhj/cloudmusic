@@ -1,10 +1,10 @@
 import {request} from '@/network/request.js'
 
 
-export function getSongPlayList(order='hot',limit=50,offset=0){
+export function getSongPlayList(order='hot',limit=50,offset=0,cat='全部'){
 
 
-  return request({url: `/top/playlist?limit=${limit}&order=${order}&offset=${offset*limit}` })
+  return request({url: `/top/playlist?limit=${limit}&order=${order}&offset=${offset*limit}&cat=${cat}` })
 
 
 }

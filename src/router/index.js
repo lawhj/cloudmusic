@@ -44,12 +44,12 @@ const routes = [
     name: 'Song',
     component: () => import(/* webpackChunkName: "about" */ '../views/song/Song.vue')
   }
-  // ,
-  // {
-  //   path: '/playlist',
-  //   name: 'Playlist',
-  //   component: () => import(/* webpackChunkName: "about" */ '../views/songlist/Playlist.vue')
-  // }
+  ,
+  {
+    path: '/songlistdetail',
+    name: 'Songlistdetail',
+    component: () => import(/* webpackChunkName: "about" */ '../views/songlist/Songlistdetail.vue')
+  }
 ]
 
 const router = createRouter({

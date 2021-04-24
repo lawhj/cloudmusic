@@ -22,7 +22,7 @@
             <router-link to="/list"  >音乐人</router-link>
           </li>
           <li>
-            <router-link to="/list"  >下载客户端</router-link>
+            <router-link to="/songlistdetail"  >下载客户端</router-link>
           </li>
         </ul>
         <div class="search">

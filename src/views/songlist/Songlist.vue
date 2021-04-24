@@ -63,7 +63,7 @@
                 <img :src="item.al.picUrl" v-if="index<3" class="songCover">
                 <div class="playsong">
                   <img src="~@/assets/images/play.png" @click.prevent="toplaysong(item)" >
-                  <a href="#" @click.prevent="goToSongDetail(item)" >{{item.al.name}}</a>
+                  <a href="#" @click.prevent="goToSongDetail(item)" >{{item.name}}</a>
                 </div>
               </td>
               <td>{{parseInt(item.dt/1000/60).toString().padStart(2,'0')}}:{{parseInt(item.dt/1000%60).toString().padStart(2,'0')}}</td>
@@ -139,7 +139,7 @@ export default {
      playsongID.value=item.id
      playsongCover.value=item.al.picUrl
      playsongSinger.value=item.ar[0].name
-     playsongName.value=item.al.name
+     playsongName.value=item.name
    }
 
    let closeMusicPlayer=()=>{
