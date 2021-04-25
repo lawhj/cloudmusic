@@ -22,7 +22,7 @@
     <div class="body">
       <div class="songlists" v-show="listShow">
         <div class="listItem" v-for="item in getList">
-          <img :src="item.coverImgUrl" @click.prevent="goToListDetail(item.id)"   />
+          <img :src="item.coverImgUrl" @click.prevent="goToListDetail(item.id)"  :title="item.name" />
           <a href="#" @click.prevent="goToListDetail(item.id)" >{{item.name}}</a>
         </div>
       </div>

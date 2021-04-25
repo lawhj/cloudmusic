@@ -4,13 +4,13 @@
       <div class="recommendlist w clearfix">
         <ul>
           <li>
-            <a href="#">推荐</a>
+            <a href="#" @click.prevent="goToGuide(0)" >推荐</a>
           </li>
           <li>
-            <a href="#">排行榜</a>
+            <a href="#" @click.prevent="goToGuide(1)">排行榜</a>
           </li>
           <li>
-            <a href="#">歌单</a>
+            <a href="#" @click.prevent="goToGuide(2)">歌单</a>
           </li>
           <li>
             <a href="#">主播电台</a>
@@ -28,8 +28,24 @@
 </template>
 
 <script>
+import {useRouter} from 'vue-router'
+
 export default {
-  name:'Secondheader'
+  name:'Secondheader',
+  setup(){
+    const router=useRouter()
+
+    let goToGuide=(type)=>{
+      let arr=['/','/toplist','/playlist']
+      router.push({path:arr[type]})
+    }
+
+   return{
+     goToGuide
+   }
+
+  }
+
 }
 </script>
 

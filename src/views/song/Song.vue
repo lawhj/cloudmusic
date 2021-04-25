@@ -1,5 +1,6 @@
 <template>
   <!-- <Topheader></Topheader> -->
+  <Secondheader></Secondheader>
   <div class="songdetail">
     <!-- <ul>
       <li v-for="item in lyric">{{item}}</li>
@@ -85,13 +86,14 @@ import Topheader from '@/views/Topheader.vue'
 import {getSongdetail,getSongComment,getSimilarSong} from '@/network/songdetail.js'
 import {useRoute} from 'vue-router'
 import Songplay from '@/views/Songplay.vue'
-
+import Secondheader from '@/views/Secondheader'
 
 export default {
   name:'Song',
   components:{
     Topheader,
-    Songplay
+    Songplay,
+    Secondheader
   },
   setup(){
 
