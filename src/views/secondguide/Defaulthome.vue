@@ -1,6 +1,6 @@
 <template>
   <div class="home">
-    
+
     <div class="banner">
       <div class="block">
   <el-carousel trigger="click" height="300px">
@@ -38,7 +38,7 @@
             <a href="#" class="right">更多</a>
           </div>
           <div class="listDetail">
-            <div class="listItem" v-for="item in getHotLists">
+            <div class="listItem" v-for="item in getHotLists" @click.prevent="goToListDetail(item.id)">
               <img :src="item.coverImgUrl" />
               <a href="#">{{item.name}}</a>
             </div>
@@ -84,7 +84,7 @@
                 <a href="#">{{item.name}}</a>
               </div>
               <ol>
-                <li v-for="song in item.tracks.slice(0,10)"> <a href="#">{{song.name}}</a> </li>
+                <li v-for="song in item.tracks.slice(0,10)"> <a href="#" @click.prevent="goToSongDetail(song.id)">{{song.name}}</a> </li>
                 <li class="checkall"> <a href="#">查看全部></a>  </li>
               </ol>
             </div>
@@ -139,6 +139,8 @@ export default {
     let newListsArray=ref([])
     let RankListsArray=ref([])
 
+    const router=useRouter()
+
      onMounted(()=>{
          getBannerList().then(res=>{banners.value=res.data.banners})
          getSongPlayList('hot',8).then(res=>{hotListsArray.value=res.data.playlists;})
@@ -166,11 +168,21 @@ export default {
     })
 
 
+    let goToListDetail=(id)=>{
+       router.push({path:'/songlistdetail',query:{listid:id}})
+    }
+
+    let goToSongDetail=(id)=>{
+         router.push({path:'/song',query:{songid:id}})
+    }
+
    return {
      bannerList,
      getHotLists,
      getNewLists,
-     getRankLists
+     getRankLists,
+     goToListDetail,
+     goToSongDetail
    }
 
   }
@@ -402,5 +414,9 @@ export default {
 }
 .rankBody .checkall a{
   float:right;
+}
+
+.listItem:hover{
+  cursor: pointer;
 }
 </style>

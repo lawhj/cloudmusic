@@ -22,14 +22,20 @@
             <router-link to="/list"  >音乐人</router-link>
           </li>
           <li>
-            <router-link to="/songlistdetail"  >下载客户端</router-link>
+            <router-link to="/dialog"  >下载客户端</router-link>
           </li>
         </ul>
         <div class="search">
           <input type="search" placeholder="电台/视频/歌手" >
         </div>
         <button class="author">创作者中心</button>
-        <a href="#" class="login">登录</a>
+        <a href="#" class="login" @click.prevent="toLogin" v-show="!islogin">登录</a>
+        <div class="userinfo" v-show="islogin">
+          <img :src="$store.state.user.avatarUrl" />
+          <a href="#" class="login" @click.prevent="toLogout" >退出</a>
+
+        </div>
+
       </nav>
     </div>
 
@@ -38,14 +44,133 @@
         <component class="view" :is="Component" />
       </keep-alive>
     </router-view>
+
+
+    <div class="dialog">
+      <el-dialog
+    title="登录页面"
+    v-model="dialogVisible"
+    width="30%"
+    @close="toCloseLogin"
+    :before-close="handleClose">
+    <img :src="imageSrc" alt="二维码过期" >
+    <span>请用APP扫码登录</span>
+    <template #footer>
+      <span class="dialog-footer">
+      </span>
+    </template>
+  </el-dialog>
+    </div>
+
+
   </div>
 </template>
 
 <script>
+import {ref} from 'vue'
+import {checkStatus,getStatus,getKey,getImg,logout} from '@/network/login.js'
+
 
 export default {
-  name: 'App'
-}
+  name: 'App',
+  data(){
+   return {
+     dialogVisible:false,
+     imgSrc:'',
+     islogin:false
+   }
+
+ },
+  methods:{
+    handleClose(){
+      this.dialogVisible=false;
+    },
+    toLogin(){
+      this.dialogVisible=true;
+      this.login()
+      // let obj={avatarUrl:'https://p1.music.126.net/FfCRss9kp-nnG6xslggmeQ==/109951165613691674.jpg'}
+      // this.$store.commit('setUser',obj)
+      // this.islogin=true
+    },
+    toCloseLogin(){
+          this.dialogVisible=false
+    },
+    async checkStatus(key) {
+        const res = await checkStatus(key)
+        console.log('检查状态',res);
+        return res.data
+      },
+      async  getLoginStatus() {
+           const res = getStatus()
+           // console.log('得到登录状态',res);
+           return res
+         },
+      async  login() {
+           let timer
+           let timestamp = Date.now()
+           this.getLoginStatus()
+           const res = await getKey()
+           const key = res.data.data.unikey
+           const res2 = await getImg(key)
+           this.imgSrc=res2.data.data.qrimg
+
+           console.log('被调用了login');
+
+           timer = setInterval(async () => {
+             const statusRes = await this.checkStatus(key)
+             if (statusRes.code === 800) {
+               alert('二维码已过期,请重新获取')
+               this.imgSrc=''
+               clearInterval(timer)
+             }
+             if (statusRes.code === 803) {
+               // 这一步会返回cookie
+               clearInterval(timer)
+               alert('授权登录成功')
+               this.islogin=true
+               this.$store.commit('setLogin',true)
+               console.log(this.$store.state.isLogin);
+               this.toCloseLogin()
+              let obj=await this.getLoginStatus()
+              this.$store.commit('setUser',obj.data.data.profile)
+              console.log(obj);
+             }
+
+             if(!this.dialogVisible){
+               clearInterval(timer)
+             }
+
+           }, 3000)
+         },
+         toLogout(){
+           // console.log(this.$store.state.isLogin);
+           logout().then(res=>{
+             console.log(res);
+           })
+           this.islogin=false
+           this.$store.commit('setLogin',false)
+           this.$store.commit('setUser',{})
+           console.log('isL ',this.$store.state.isLogin);
+           console.log('user is',this.$store.state.user);
+           // window.localStorage.setItem('log','')
+           // console.log(this.$store.state.isLogin);
+         }
+
+  },
+    computed:{
+          imageSrc(){
+            return this.imgSrc
+          },
+
+     },
+     mounted(){
+         // this.islogin=true
+         // console.log(this.islogin);
+     }
+
+  }
+
+
 </script>
 
 <style scoped>
@@ -117,11 +242,54 @@ export default {
   color: #eee;
   background-color: rgba(36,36,36);
   border: 1px solid #eee;
-  margin: 0 30px;
+  margin: 0 10px;
+  margin-top: 13px;
+  float: left;
 }
 .nav .login{
   color: #eee;
   font-size:10px;
 }
+
+ .userinfo{
+  float: left;
+  /* width: 30px; */
+  height:60px;
+  display: flex;
+  align-items: center;
+}
+.nav .userinfo a{
+  display:block;
+  height: auto;
+}
+.userinfo img{
+  width:35px;
+  height: 35px;
+  border-radius: 17px;
+  /* vertical-align: middle; */
+}
+
+
+.dialog img{
+  position: absolute;
+  width:130px;
+  height:130px;
+  top:50%;
+  left: 50%;
+  transform: translate(-50%,-50%);
+}
+
+.dialog{
+  position: relative;
+}
+
+.dialog span{
+  position: absolute;
+  bottom: 2px;
+  left: 50%;
+  font-size: 12px;
+  transform: translateX(-50%);
+}
+
 
 </style>

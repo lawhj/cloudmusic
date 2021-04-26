@@ -176,7 +176,8 @@ export default {
       getSongdetail(id).then(res=>{
         console.log(res);
         coverUrl.value=res.data.songs[0].al.picUrl
-        songname.value=res.data.songs[0].al.name
+        // songname.value=res.data.songs[0].al.name
+        songname.value=res.data.songs[0].name
         alia.value=res.data.songs[0].alia[0]
         singer.value=res.data.songs[0].ar[0].name
 

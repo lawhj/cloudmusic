@@ -49,6 +49,11 @@ const routes = [
     path: '/songlistdetail',
     name: 'Songlistdetail',
     component: () => import(/* webpackChunkName: "about" */ '../views/songlist/Songlistdetail.vue')
+  },
+  {
+    path: '/dialog',
+    name: 'Dialog',
+    component: () => import(/* webpackChunkName: "about" */ '../views/Dialog.vue')
   }
 ]
 
