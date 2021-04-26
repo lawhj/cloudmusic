@@ -81,7 +81,7 @@
             <div class="rankItem" v-for="item in getRankLists">
               <div class="rankHeader">
                 <img :src="item.coverImgUrl">
-                <a href="#">{{item.name}}</a>
+                <a href="#" >{{item.name}}</a>
               </div>
               <ol>
                 <li v-for="song in item.tracks.slice(0,10)"> <a href="#" @click.prevent="goToSongDetail(song.id)">{{song.name}}</a> </li>

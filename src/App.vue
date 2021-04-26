@@ -22,11 +22,11 @@
             <router-link to="/list"  >音乐人</router-link>
           </li>
           <li>
-            <router-link to="/dialog"  >下载客户端</router-link>
+            <router-link to="/search"  >下载客户端</router-link>
           </li>
         </ul>
         <div class="search">
-          <input type="search" placeholder="电台/视频/歌手" >
+          <input type="search" placeholder="电台/视频/歌手" @keyup.enter="enterClick" v-model="searchword">
         </div>
         <button class="author">创作者中心</button>
         <a href="#" class="login" @click.prevent="toLogin" v-show="!islogin">登录</a>
@@ -77,7 +77,8 @@ export default {
    return {
      dialogVisible:false,
      imgSrc:'',
-     islogin:false
+     islogin:false,
+     searchword:''
    }
 
  },
@@ -133,6 +134,7 @@ export default {
                this.toCloseLogin()
               let obj=await this.getLoginStatus()
               this.$store.commit('setUser',obj.data.data.profile)
+              window.localStorage.setItem('clouduser',JSON.stringify(obj.data.data.profile))
               console.log(obj);
              }
 
@@ -147,13 +149,18 @@ export default {
            logout().then(res=>{
              console.log(res);
            })
+           console.log(JSON.parse(window.localStorage.getItem('clouduser')) );
            this.islogin=false
            this.$store.commit('setLogin',false)
            this.$store.commit('setUser',{})
            console.log('isL ',this.$store.state.isLogin);
            console.log('user is',this.$store.state.user);
-           // window.localStorage.setItem('log','')
+          window.localStorage.removeItem('clouduser')
            // console.log(this.$store.state.isLogin);
+         },
+
+         enterClick(){
+           this.$router.push({path:'/search',query:{keyword:this.searchword}})
          }
 
   },
@@ -164,8 +171,21 @@ export default {
 
      },
      mounted(){
-         // this.islogin=true
-         // console.log(this.islogin);
+         if(window.localStorage.getItem('clouduser')!=null)
+         {
+           this.$store.commit('setUser',JSON.parse(window.localStorage.getItem('clouduser')))
+           this.islogin=true
+           this.$store.commit('setLogin',true)
+           console.log('已经登录过了');
+         }
+         // else{
+         //   console.log('还没登录');
+         //   console.log(this.$store.state.user);
+         //   console.log(this.$store.state.isLogin);
+         // }
+         // window.localStorage.setItem('obj',JSON.stringify({name:'obj1',age:99}))
+         // window.localStorage.removeItem('obj')
+         // console.log(JSON.parse(window.localStorage.getItem('obj')));
      }
 
   }

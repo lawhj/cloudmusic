@@ -51,9 +51,9 @@ const routes = [
     component: () => import(/* webpackChunkName: "about" */ '../views/songlist/Songlistdetail.vue')
   },
   {
-    path: '/dialog',
-    name: 'Dialog',
-    component: () => import(/* webpackChunkName: "about" */ '../views/Dialog.vue')
+    path: '/search',
+    name: 'Search',
+    component: () => import(/* webpackChunkName: "about" */ '../views/Search.vue')
   }
 ]
 
