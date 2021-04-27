@@ -1,7 +1,13 @@
 <template>
   <div class="wholesearch">
     <div class="search">
-      <input type="search" ><button> <i></i> </button>
+      <input type="search" v-model="searchvalue" @keyup.enter="toSearch" ><button @click="toSearch"> <i></i> </button>
+    </div>
+    <div class="searchResult">
+      <h4 v-show="curIndex==1">搜索{{keywords}},找到{{getCount}}首单曲</h4>
+      <h4 v-show="curIndex==2">搜索{{keywords}},找到{{getCount}}个歌手</h4>
+      <h4 v-show="curIndex==3">搜索{{keywords}},找到{{getCount}}张专辑</h4>
+      <h4 v-show="curIndex==4">搜索{{keywords}},找到{{getCount}}个歌单</h4>
     </div>
     <div class="tabs">
       <el-tabs type="border-card" stretch=true v-model="curIndex" @tab-click="changeTab">
@@ -10,10 +16,10 @@
       <ul>
         <li v-for="item in getResult">
           <div class="songname">
-            {{item.name}}
+            <a href="#" @click="goToSongDetail(item.id)">{{item.name}}</a>
           </div>
-          <div class="singer">
-           {{item.ar[0].name}}
+          <div class="songsinger">
+           <a href="#" v-for="s in item.ar">{{s.name}}</a>
           </div>
           <div class="album">
             {{item.al.name}}
@@ -28,8 +34,8 @@
   <el-tab-pane label="歌手" name="2">
     <ul class="singer">
       <li v-for="item in singers">
-        <img :src="item.picUrl" >
-        <a href="#">{{item.name}}</a>
+        <img :src="item.picUrl" @click.prevent="goToSingerDetail(item.id)">
+        <a href="#" @click.prevent="goToSingerDetail(item.id)" >{{item.name}}</a>
       </li>
     </ul>
   </el-tab-pane>
@@ -47,22 +53,22 @@
       <ul>
         <li v-for="item in songlist">
           <div class="img">
-            <img :src="item.coverImgUrl" >
+            <img :src="item.coverImgUrl" @click.prevent="goToSongListDetail(item.id)">
           </div>
           <div class="name">
-           {{item.name}}
+           <a href="#" @click.prevent="goToSongListDetail(item.id)">{{item.name}}</a>
           </div>
           <div class="count">
-            {{item.trackCount}}
+            {{item.trackCount}}首
           </div>
           <div class="creator">
-            by{{item.creator.nickname}}
+            by {{item.creator.nickname}}
           </div>
           <div class="collect">
-            {{item.bookCount}}
+            收藏:{{item.bookCount}}次
           </div>
           <div class="listen">
-            {{item.playCount}}
+            收听:{{item.playCount}}次
           </div>
         </li>
       </ul>
@@ -92,7 +98,7 @@ page-size="30"
 <script>
 import {getSearch} from '@/network/search.js'
 import {ref,onMounted,computed,watch} from 'vue'
-import {useRoute} from 'vue-router'
+import {useRoute,useRouter} from 'vue-router'
 
 
 export default {
@@ -113,6 +119,9 @@ export default {
 
         let route=useRoute()
 
+        let searchvalue=ref('')
+        const router=useRouter()
+
         let init=(key)=>{
 
           if(parseInt(curIndex.value)==1)
@@ -121,7 +130,7 @@ export default {
               // result.value=res.data.result.songs
               result.value=res.data.result.songs
               counts.value[0]=(res.data.result.songCount)
-              console.log('请求的是1的',curPage.value);
+              console.log(result.value);
             })
           }
 
@@ -148,7 +157,7 @@ export default {
             getSearch(key,30,1000,curPage.value-1).then(res=>{
                songlist.value=res.data.result.playlists
                counts.value[3]=(res.data.result.playlistCount)
-               console.log('请求的是4');
+               console.log('请求的是4',res);
             })
           }
 
@@ -182,6 +191,22 @@ export default {
           init(keywords.value)
         }
 
+        let toSearch=()=>{
+             router.push({path:'/search',query:{keyword:searchvalue.value}})
+        }
+
+        let goToSongDetail=(id)=>{
+            router.push({path:'/song',query:{songid:id}})
+        }
+
+        let goToSongListDetail=(id)=>{
+          router.push({path:'/songlistdetail',query:{listid:id}})
+        }
+
+        let goToSingerDetail=(id)=>{
+          router.push({path:'/singer',query:{artistid:id}})
+        }
+
         watch(()=>{
             if(route.query.keyword)
             {
@@ -191,6 +216,7 @@ export default {
                     init(route.query.keyword)
 
                    keywords.value=route.query.keyword
+                   searchvalue.value=route.query.keyword
               }
 
             }
@@ -207,7 +233,13 @@ export default {
            getCount,
            changeTab,
            curPage,
-           pageChange
+           pageChange,
+           toSearch,
+           searchvalue,
+           keywords,
+           goToSongDetail,
+           goToSongListDetail,
+           goToSingerDetail
          }
 
   }
@@ -250,6 +282,13 @@ export default {
   background:url('~@/assets/images/search.png') no-repeat;
   background-size: 30px 30px;
 }
+
+.searchResult{
+  font-weight: normal;
+  font-size: 14px;
+  margin-bottom: 10px;
+}
+
 .singleSong ul li{
   height: 40px;
   display:flex;
@@ -267,8 +306,8 @@ export default {
 }
 .singleSong ul li div:nth-of-type(3)
 {
-  width:130px;
-  margin-right: 30px;
+  width:150px;
+  margin-right: 40px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -282,6 +321,24 @@ export default {
 {
   background-color: #eee;
 }
+
+.songsinger{
+  margin-right: 30px;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+.songsinger a
+{
+  border-right: 1px solid black;
+  padding: 0 5px;
+}
+.songsinger a:last-of-type
+{
+  border-right: 0px;
+}
+
 .singer  {
   display: flex;
   flex-wrap: wrap;
@@ -343,15 +400,24 @@ export default {
 }
 .songlists ul li div:nth-of-type(5)
 {
-  width:100px;
+  width:125px;
 }
 .songlists ul li div:nth-of-type(6)
 {
-  width:100px;
+  width:125px;
 }
 .page{
   margin: 20px 0;
   width: 1000px;
   text-align: center;
+}
+a:hover{
+  text-decoration: underline;
+}
+.creator{
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  margin-right: 20px;
 }
 </style>
