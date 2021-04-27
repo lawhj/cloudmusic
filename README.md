@@ -16,6 +16,9 @@
 ## 搜索
 ![image](https://github.com/lawhj/cloudmusic/blob/master/preview/search.png)
 
+## 音乐播放
+![image](https://github.com/lawhj/cloudmusic/blob/master/preview/songplay.png)
+
 ## 二维码登录
 ![image](https://github.com/lawhj/cloudmusic/blob/master/preview/login.png)
 
