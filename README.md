@@ -10,21 +10,26 @@
 4.Vue-router
 
 ## 目前功能预览
-# 主页
+## 主页
 ![image](https://github.com/lawhj/cloudmusic/blob/master/preview/index.png)
 
-# 搜索
+## 搜索
 ![image](https://github.com/lawhj/cloudmusic/blob/master/preview/search.png)
 
-# 二维码登录
+## 二维码登录
 ![image](https://github.com/lawhj/cloudmusic/blob/master/preview/login.png)
 
-# 歌单
+## 歌单
 ![image](https://github.com/lawhj/cloudmusic/blob/master/preview/playlist.png)
 
-# 歌手
+## 歌手
 ![image](https://github.com/lawhj/cloudmusic/blob/master/preview/artist.png)
 
-# 歌曲详情
+## 歌曲详情
+![image](https://github.com/lawhj/cloudmusic/blob/master/preview/songdetail.png)
+
+## 歌单详情
 ![image](https://github.com/lawhj/cloudmusic/blob/master/preview/songlistdetail.png)
  
+## 排行榜
+![image](https://github.com/lawhj/cloudmusic/blob/master/preview/toplist.png)
