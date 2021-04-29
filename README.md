@@ -13,14 +13,18 @@
 ## 主页
 ![image](https://github.com/lawhj/cloudmusic/blob/master/preview/index.png)
 
+## 二维码登录
+![image](https://github.com/lawhj/cloudmusic/blob/master/preview/login.png)
+
+## 登录成功后访问我的音乐
+![image](https://github.com/lawhj/cloudmusic/blob/master/preview/userlist.png)
+
 ## 搜索
 ![image](https://github.com/lawhj/cloudmusic/blob/master/preview/search.png)
 
 ## 音乐播放
 ![image](https://github.com/lawhj/cloudmusic/blob/master/preview/songplay.png)
 
-## 二维码登录
-![image](https://github.com/lawhj/cloudmusic/blob/master/preview/login.png)
 
 ## 歌单
 ![image](https://github.com/lawhj/cloudmusic/blob/master/preview/playlist.png)
