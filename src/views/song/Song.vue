@@ -64,8 +64,8 @@
         <ul>
           <li v-for="item in similars">
             <div>
-              <a href="#">{{item.name}}</a>
-              <a href="#">{{item.artists[0].name}}</a>
+              <a href="#" @click.prevent="goToSongDetail(item.id)">{{item.name}}</a>
+              <a href="#" @click.prevent="goToSingerDetail(item.artists[0].id)">{{item.artists[0].name}}</a>
             </div>
             <i @click.prevent="toplaysong(0,item)" ></i>
           </li>
@@ -84,7 +84,7 @@ import {getSongLyric} from '@/network/lyric.js'
 import {ref,onMounted,watch} from 'vue'
 import Topheader from '@/views/Topheader.vue'
 import {getSongdetail,getSongComment,getSimilarSong} from '@/network/songdetail.js'
-import {useRoute} from 'vue-router'
+import {useRoute,useRouter} from 'vue-router'
 import Songplay from '@/views/Songplay.vue'
 import Secondheader from '@/views/Secondheader'
 
@@ -106,6 +106,7 @@ export default {
 
     let singer=ref('')
     const route=useRoute()
+    const router=useRouter()
 
     let songID=ref(0)
 
@@ -222,6 +223,14 @@ export default {
 
      }
 
+     let goToSongDetail=(id)=>{
+         router.push({path:'/song',query:{songid:id}})
+     }
+
+     let goToSingerDetail=(id)=>{
+       router.push({path:'/singer',query:{artistid:id}})
+     }
+
      watch(()=>{
          if(route.query.songid)
          {
@@ -263,7 +272,9 @@ export default {
     playsongName,
     closeMusicPlayer,
     isPlaySong,
-    toplaysong
+    toplaysong,
+    goToSongDetail,
+    goToSingerDetail
   }
 
   }

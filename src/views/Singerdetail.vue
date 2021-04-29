@@ -9,12 +9,12 @@
           <el-tabs type="border-card" stretch=true v-model="curIndex" @tab-click="changeTab">
     <el-tab-pane label="热门歌曲" name="1" class="hot">
       <ul>
-        <li v-for="(item,index) in hotSongs">
+        <li v-for="(item,index) in hotSongs" :key="item">
           <div class="index">
             {{index+1}}
           </div>
           <div class="name">
-            <a href="#">{{item.name}}</a>
+            <a href="#" @click.prevent="goToSongDetail(item.id)">{{item.name}}</a>
           </div>
           <div class="time">
 {{parseInt(item.dt/1000/60).toString().padStart(2,'0')}}:{{parseInt(item.dt/1000%60).toString().padStart(2,'0')}}
@@ -194,6 +194,10 @@ export default {
        init(singerId.value)
      }
 
+     let goToSongDetail=(id)=>{
+         router.push({path:'/song',query:{songid:id}})
+     }
+
 
      watch(()=>{
          if(route.query.artistid)
@@ -224,7 +228,8 @@ export default {
      desc,
      introduction,
      pageChange,
-     changeTab
+     changeTab,
+     goToSongDetail
    }
 
   }

@@ -10,7 +10,7 @@
             <router-link to="/" >发现音乐</router-link>
           </li>
           <li>
-            <router-link to="/list"  >我的音乐</router-link>
+            <router-link to="/my"  >我的音乐</router-link>
           </li>
           <li>
             <router-link to="/about"  >朋友</router-link>
@@ -177,6 +177,7 @@ export default {
            this.islogin=true
            this.$store.commit('setLogin',true)
            console.log('已经登录过了');
+           // console.log('用户信息',this.$store.state.user.userId);
          }
          // else{
          //   console.log('还没登录');

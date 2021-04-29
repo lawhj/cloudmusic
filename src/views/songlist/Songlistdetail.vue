@@ -55,16 +55,16 @@
                  </tr>
                </thead>
                <tbody>
-                 <tr v-for="(item,index) in objlist.tracks">
+                 <tr v-for="(item,index) in objlist.tracks" :key="item">
                    <td class="firstTD">
                      <div class="tdIndex">
                        {{index+1}}
                      </div>
                      <i @click.prevent="toplaysong(item)" ></i>
                    </td>
-                   <td> <a href="#">{{item.name}}</a> </td>
+                   <td> <a href="#" @click="goToSongDetail(item.id)">{{item.name}}</a> </td>
                    <td>{{parseInt(item.dt/1000/60).toString().padStart(2,'0')}}:{{parseInt(item.dt/1000%60).toString().padStart(2,'0')}}</td>
-                   <td> <a href="#">{{item.ar[0].name}}</a> </td>
+                   <td> <a href="#" @click.prevent="goToSingerDetail(item.ar[0].id)">{{item.ar[0].name}}</a> </td>
                    <td> <a href="#">{{item.al.name}}</a> </td>
                  </tr>
                </tbody>
@@ -76,7 +76,7 @@
                </div>
                <div class="commentBody">
                  <ul>
-                   <li v-for="item in comments">
+                   <li v-for="item in comments" >
                     <img :src="item.user.avatarUrl" ><a href="#">{{item.user.nickname}}</a>:
                     {{item.content}}
                    </li>
@@ -126,7 +126,7 @@
 </template>
 
 <script>
-import {useRoute} from 'vue-router'
+import {useRoute,useRouter} from 'vue-router'
 import {ref,onMounted,watch,reactive,toRefs,computed} from 'vue'
 import Secondheader from '@/views/Secondheader.vue'
 import {getList,getListComment,getSimilarList} from '@/network/list.js'
@@ -147,6 +147,7 @@ export default {
      objlist:{}
    })
    const route=useRoute()
+   const router=useRouter()
 
    let comments=ref([])
    let totalComments=ref(0)
@@ -238,6 +239,16 @@ export default {
    }
 
 
+   let goToSongDetail=(id)=>{
+       router.push({path:'/song',query:{songid:id}})
+   }
+
+
+   let goToSingerDetail=(id)=>{
+     router.push({path:'/singer',query:{artistid:id}})
+   }
+
+
    return{
       ...toRefs(list),
       songCount,
@@ -254,7 +265,9 @@ export default {
       playsongSinger,
       isPlaySong,
       toplaysong,
-      closeMusicPlayer
+      closeMusicPlayer,
+      goToSongDetail,
+      goToSingerDetail
    }
 
   }
@@ -364,9 +377,10 @@ font-size: 16px;
   font-size: 12px;
   height: 30px;
   text-align: left;
+  /* line-height: 30px;
   white-space: nowrap;
   overflow: hidden;
-  text-overflow:ellipsis;
+  text-overflow:ellipsis; */
 
 
 }
@@ -379,23 +393,54 @@ font-size: 16px;
 }
 .listbody table td:nth-of-type(2)
 {
-  width: 240px;
+  width: 220px;
 }
+.listbody table td:nth-of-type(2) a
+{
+  display: block;
+  width:180px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 .listbody table td:nth-of-type(3)
 {
-  width: 110px;
+  width: 100px;
 }
 .listbody table td:nth-of-type(4)
 {
-  width: 88px;
+  width: 95px;
 }
-.listbody table td:nth-of-type(1)
+.listbody table td:nth-of-type(4) a
+{
+  display: block;
+  width:85px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.listbody table td:nth-of-type(5)
 {
   width: 127px;
 }
+.listbody table td:nth-of-type(5) a
+{
+  display: block;
+  width:120px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+
 .listbody table td a:hover{
   text-decoration: underline;
 }
+
+
+
 .listbody table tr:nth-of-type(2n)
 {
   background-color: #eee;
@@ -456,6 +501,7 @@ font-size: 16px;
 
     text-align: center;
 }
+
 
 
 

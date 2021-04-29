@@ -19,7 +19,7 @@
             <a href="#" @click="goToSongDetail(item.id)">{{item.name}}</a>
           </div>
           <div class="songsinger">
-           <a href="#" v-for="s in item.ar">{{s.name}}</a>
+           <a href="#" v-for="s in item.ar"  @click.prevent="goToSingerDetail(s.id)" >{{s.name}}</a>
           </div>
           <div class="album">
             {{item.al.name}}

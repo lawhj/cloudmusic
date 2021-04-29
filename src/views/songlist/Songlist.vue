@@ -67,7 +67,9 @@
                 </div>
               </td>
               <td>{{parseInt(item.dt/1000/60).toString().padStart(2,'0')}}:{{parseInt(item.dt/1000%60).toString().padStart(2,'0')}}</td>
-              <td>{{item.ar[0].name}}</td>
+              <td>
+                <a href="#" @click.prevent="goToSingerDetail(item.ar[0].id)">{{item.ar[0].name}} </a>
+              </td>
             </tr>
           </table>
         </div>
@@ -150,6 +152,10 @@ export default {
        router.push({path:'/song',query:{songid:item.id}})
    }
 
+   let goToSingerDetail=(id)=>{
+     router.push({path:'/singer',query:{artistid:id}})
+   }
+
 
    return{
      getRankLists,
@@ -163,7 +169,8 @@ export default {
      playsongSinger,
      playsongName,
      closeMusicPlayer,
-     goToSongDetail
+     goToSongDetail,
+     goToSingerDetail
    }
 
 
