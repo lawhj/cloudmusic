@@ -17,7 +17,7 @@
 ![image](https://github.com/lawhj/cloudmusic/blob/master/preview/login.png)
 
 ## 登录成功后访问我的音乐
-![image](https://github.com/lawhj/cloudmusic/blob/master/preview/userlist.png)
+![image](https://github.com/lawhj/cloudmusic/blob/master/preview/userlist.jpg)
 
 ## 搜索
 ![image](https://github.com/lawhj/cloudmusic/blob/master/preview/search.png)
