@@ -13,7 +13,7 @@
             <router-link to="/my"  >我的音乐</router-link>
           </li>
           <li>
-            <router-link to="/about"  >朋友</router-link>
+            <router-link to="/friend"  >朋友</router-link>
           </li>
           <li>
             <router-link to="/song"  >商城</router-link>
@@ -30,10 +30,22 @@
         </div>
         <button class="author">创作者中心</button>
         <a href="#" class="login" @click.prevent="toLogin" v-show="!islogin">登录</a>
-        <div class="userinfo" v-show="islogin">
-          <img :src="$store.state.user.avatarUrl" />
+        <div class="userinfo" v-show="islogin" @mouseleave.native="noHover">
+          <img :src="$store.state.user.avatarUrl" @mouseenter.native="goHover"  />
           <a href="#" class="login" @click.prevent="toLogout" >退出</a>
-
+          <div class="personalMsg" v-show="isHover"  >
+            <ul>
+              <li>
+                <a href="#">我的主页</a>
+              </li>
+              <li>
+                <a href="#" @click.prevent="goToMessage">我的消息</a>
+              </li>
+              <li>
+                <a href="#">实名验证</a>
+              </li>
+            </ul>
+          </div>
         </div>
 
       </nav>
@@ -78,7 +90,8 @@ export default {
      dialogVisible:false,
      imgSrc:'',
      islogin:false,
-     searchword:''
+     searchword:'',
+     isHover:false
    }
 
  },
@@ -161,6 +174,15 @@ export default {
 
          enterClick(){
            this.$router.push({path:'/search',query:{keyword:this.searchword}})
+         },
+         goHover(){
+           this.isHover=true;
+         },
+         noHover(){
+           this.isHover=false;
+         },
+         goToMessage(){
+           this.$router.push({path:'/message'})
          }
 
   },
@@ -312,5 +334,26 @@ export default {
   transform: translateX(-50%);
 }
 
+.userinfo{
+  position: relative;
+}
+
+.personalMsg{
+  width:100px;
+  position: absolute;
+  top:50px;
+  left:-20px;
+  background-color: rgba(36, 36, 36);
+}
+.personalMsg ul li{
+  width:100px;
+  height:30px;
+  color: white;
+  text-align: center;
+  line-height: 30px;
+}
+.personalMsg ul li a{
+  font-size: 14px;
+}
 
 </style>

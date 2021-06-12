@@ -16,7 +16,7 @@
             <a href="#">主播电台</a>
           </li>
           <li>
-            <a href="#">歌手</a>
+            <router-link to='/artist'>歌手</router-link>
           </li>
           <li>
             <a href="#">新碟上架</a>

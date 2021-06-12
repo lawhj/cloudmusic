@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import Home from '../views/Home.vue'
+import store from '../store'
 
 const routes = [
   {
@@ -18,6 +19,14 @@ const routes = [
         path: 'playlist',
         name: 'Playlist',
         component: () => import(/* webpackChunkName: "about" */ '../views/songlist/Playlist.vue')
+      },
+      {
+        path: 'artist',
+        name: 'Si',
+        component: () => import(/* webpackChunkName: "about" */ '../views/Singer.vue'),
+        meta:{
+          title:'歌手'
+        }
       }
     ]
   },
@@ -86,9 +95,34 @@ const routes = [
     name: 'My',
     component: () => import(/* webpackChunkName: "about" */ '../views/user/My.vue'),
     meta:{
-      title:'我的'
+      title:'我的',
+      isAuthRequire:true
+    }
+  },
+  {
+    path: '/friend',
+    name: 'Friend',
+    component: () => import(/* webpackChunkName: "about" */ '../views/user/Friend.vue'),
+    meta:{
+      title:'朋友'
+    }
+  },
+  {
+    path: '/message',
+    name: 'Message',
+    component: () => import(/* webpackChunkName: "about" */ '../views/user/Message.vue'),
+    meta:{
+      title:'我的消息'
     }
   }
+  // {
+  //   path: '/artist',
+  //   name: 'Si',
+  //   component: () => import(/* webpackChunkName: "about" */ '../views/Singer.vue'),
+  //   meta:{
+  //     title:'歌手'
+  //   }
+  // }
 ]
 
 const router = createRouter({
@@ -98,7 +132,14 @@ const router = createRouter({
 
 router.beforeEach((to,from,next)=>{
   document.title=to.matched[0].meta.title;
-  next()
+  if(to.matched[0].meta.isAuthRequire&& store.state.isLogin===false)
+  {    alert('请先登录');
+       // setTimeout(function () {
+       //   next('/');
+       // }, 0);
+
+  }
+  else{next();}
 })
 
 

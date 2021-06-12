@@ -16,7 +16,7 @@
             <a href="#">主播电台</a>
           </li>
           <li>
-            <a href="#">歌手</a>
+            <a href="#" @click.prevent="goToGuide(3)">歌手</a>
           </li>
           <li>
             <a href="#">新碟上架</a>
@@ -36,7 +36,7 @@ export default {
     const router=useRouter()
 
     let goToGuide=(type)=>{
-      let arr=['/','/toplist','/playlist']
+      let arr=['/','/toplist','/playlist','/artist']
       router.push({path:arr[type]})
     }
 
