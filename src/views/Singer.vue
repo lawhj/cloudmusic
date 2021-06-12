@@ -40,6 +40,36 @@
   </div>
   <div class="mainbody">
     <h4>{{mainheader}}</h4>
+    <div class="sortForName" @click="sortClick($event)">
+      <a href="#" class="sortSelected" >热门</a>
+      <a href="#">A</a>
+      <a href="#">B</a>
+      <a href="#">C</a>
+      <a href="#">D</a>
+      <a href="#">E</a>
+      <a href="#">F</a>
+      <a href="#">G</a>
+      <a href="#">H</a>
+      <a href="#">I</a>
+      <a href="#">J</a>
+      <a href="#">K</a>
+      <a href="#">L</a>
+      <a href="#">M</a>
+      <a href="#">N</a>
+      <a href="#">O</a>
+      <a href="#">P</a>
+      <a href="#">Q</a>
+      <a href="#">R</a>
+      <a href="#">S</a>
+      <a href="#">T</a>
+      <a href="#">U</a>
+      <a href="#">V</a>
+      <a href="#">W</a>
+      <a href="#">X</a>
+      <a href="#">Y</a>
+      <a href="#">Z</a>
+      <a href="#">其他</a>
+    </div>
     <ul>
       <li v-for="item in artists.slice(0,10)" :key="item" >
         <img :src="item.picUrl"  @click="goToSingerDetail(item.id)" >
@@ -74,7 +104,8 @@ export default {
      as:[],
      type:1,
      area:7,
-     initial:-1
+     initial:-1,
+     sorts:[]
     }
   },
   mounted(){
@@ -86,6 +117,10 @@ export default {
 
      var aaas=document.querySelectorAll('.leftside a')
      this.as=aaas
+
+     var sorts=document.querySelectorAll('.sortForName a')
+     this.sorts=sorts
+
   },
   methods:{
     aclick(e){
@@ -128,6 +163,51 @@ export default {
 
        }
     },
+    sortClick(e)
+    {
+      if(e.target.tagName=='A')
+      {
+        var sort=[...this.sorts]
+        for(let i in this.sorts)
+        {
+          if(i<28)
+          {
+            this.sorts[i].className='';
+           console.log(i,this.sorts[i]);
+          }
+        }
+       console.log(this.sorts[0]);
+
+
+           for(let i in sort)
+           {
+
+
+             if(sort[i].text==e.target.text)
+             {
+               if(i==0)
+               {
+                 getArtist(this.type,this.area,"-1").then(res=>{
+                   this.artists=res.data.artists
+                 })
+               }
+               else if(i==27)
+               {
+                 getArtist(this.type,this.area,"0").then(res=>{
+                   this.artists=res.data.artists
+                 })
+               }
+               else{
+                 getArtist(this.type,this.area,e.target.text).then(res=>{
+                   this.artists=res.data.artists
+                 })
+               }
+               this.sorts[i].className='sortSelected'
+
+             }
+           }
+      }
+    },
     goToSingerDetail(id){
       this.$router.push({path:'/singer',query:{artistid:id}})
     },
@@ -150,6 +230,12 @@ export default {
          {this.type=this.$route.query.type
          this.area=this.$route.query.area
          this.startInitial(this.type,this.area)
+           var arrSorts=[...this.sorts]
+           for(let i in arrSorts)
+           {
+             arrSorts[i].className=''
+           }
+           arrSorts[0].className='sortSelected'
          }
        }
 　　}
@@ -254,4 +340,27 @@ ol li .name{
   color: rgba(194, 12, 12);
 }
 
+.sortForName{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin:20px 0px 15px 0px;
+}
+.sortForName a{
+  display: block;
+  /* flex: 1; */
+  text-align: center;
+  padding: 0 5px;
+}
+.sortForName a:first-child,.sortForName a:last-child
+{
+  width: 30px;
+  font-size:12px;
+  padding: 0;
+}
+
+.sortSelected{
+  background-color: rgba(194,12,12);
+  color: white;
+}
 </style>
